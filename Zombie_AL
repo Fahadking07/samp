@@ -1,13 +1,18 @@
 /*
-Latest Version of Zombie GameMode is created by Fahadking07
-For help contact me at: fahad.king.xo9@gmail.com
-Feel free to edit The GameMode.
-~Hopefully you wont remove the CREDIT.
+This version of Zombie Apocalypse is re-created and developed by Fahadking07. Previous versions were created by Kitten and Hossa
+You are not allowed to re-release it with out getting my permission/kitten/hossa's.
+Feel free to suggest us for new updates at ux-gaming.net/forum
 
-Credits:
-Fahadking07
-Kitten
-Hossa
+Latest Updates:
+- Login Bug Fixed
+- New awesome looking textdraws
+- Some bugs fixed
+- Maps bug fixed
+
+For any Help and Support regarding hosting, scripting, etc contact me at
+- Samp Forum or UneXpected Gaming Forums (ux-gaming.net)
+
+And expect more for its future version. I will be making it the best :D
 */
 
 
@@ -20,14 +25,6 @@ native WP_Hash(buffer[], len, const str[]);
 #include <YSI\y_ini>
 #include <KickBan>
 
-
-/*Clans For server
-To Change Clan Name Just replace [MN] With [Anyname] or (Anyname) ,etc
-*/
-#define DIALOGCLAN 1000
-#define TAGCLAN "[MN]"
-#define PASSWORDCLAN "mn01"
-
 // Defines
 #define function%0(%1) forward%0(%1);public%0(%1)
 #define NON_IMMUNE 69,14,261,2,107,11,125,6,299,43,124,12,13,280,230,274,27,25,95,260,149,29,161,76,23,115,287,67,200
@@ -37,10 +34,9 @@ To Change Clan Name Just replace [MN] With [Anyname] or (Anyname) ,etc
 #define MAX_SHOW_CP_TIME 1000
 #define MAX_END_TIME 60000
 #define MAX_BALANCERUPDATE_TIME 6000
-#define MAX_MAP_FILES 45
+#define MAX_MAP_FILES 19
 #define SCM SendClientMessage
 #define SCMTA SendClientMessageToAll
-
 
 #define Grey 0xC0C0C0FF // Defining the color 'Grey'
 // Reaction Test Script
@@ -58,8 +54,8 @@ new IsSpecing[MAX_PLAYERS], Name[MAX_PLAYER_NAME], IsBeingSpeced[MAX_PLAYERS],sp
 #define PATH "/ZMA/Users/%s.ini"
 #define NAME ".:|| ZOMBIE APOCALYPSE ||:. New Classes!"
 #define SCRIPT "v0.3"
-#define SCRIPTER "Fahad"
-#define SITE "Www.Freesa-mp.com"
+#define SCRIPTER "Fahadking07"
+#define SITE "Ux-Gaming.Net"
 #define chat "{FFFFFF}»"
 #define PLAYER_MUTE_TIME_MINUTES (2)
 
@@ -250,9 +246,9 @@ new Text:CurrentMap;
 new Text:remadeText;
 new Text:remadeText2;
 new Text:AliveInfo;
+new Text:AliveInfo2;
 new Text:ChatMsg;
 new Text:TimeLeft;
-new Text:UntilRescue;
 new Text:XP;
 new Text:Infected[MAX_PLAYERS];
 new Text:iKilled[MAX_PLAYERS];
@@ -260,6 +256,14 @@ new Text:myXP[MAX_PLAYERS];
 new Text:ServerIntroOne[MAX_PLAYERS];
 new Text:ServerIntroTwo[MAX_PLAYERS];
 new shoutstring[256];
+new Text:Textdraw0;
+new Text:Textdraw1;
+new Text:Textdraw2;
+new Text:Textdraw4;
+new Text:Textdraw5;
+new Text:Textdraw7;
+new Text:Textdraw8;
+new Text:Textdraw9;
 
 enum mapinfo
 {
@@ -374,33 +378,33 @@ new randomMessages[][] =
   	""chat""COL_BLUE" [Info] "COL_WHITE"Earn XP by killing the enemy team or using your ability and donating for double XP!",
   	""chat""COL_BLUE" [Help] "COL_WHITE"Are you lost are you new? try out the command '/help' and /vinfo",
   	""chat""COL_BLUE" [Help] "COL_WHITE"Got bugged? Cant move a single cm? try out /rbug",
-  	""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
+  	//""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
   	""chat""COL_RED" [Note] "COL_WHITE"Remember to report hackers and rule breakers with /report <id> <reason>",
   	""chat""COL_BLUE" [Help] "COL_WHITE"Remember to read the rules to prevent you from getting banned /rules",
 	""chat""COL_BLUE" [Info] "COL_WHITE"Remember to use /ss command to save your stats to avoid losing XP",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Got bugged? Cant move a single cm? try out /rbug",
-	""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
+	//""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Having problem with objects ? Try out /robj to remove them (only for humans)",
 	""chat""COL_RED" [Note] "COL_WHITE"Do NOT attack your team mates or you will be punished!",
 	""chat""COL_RED" [Note] "COL_WHITE"Report hackers and rule breakers with /report <id> <reason> , DO NOT SAY IT IN MAIN CHAT",
-	""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp",
+	//""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp",
 	""chat""COL_LGREEN" [Updates] "COL_WHITE"Wanna know whats new? Why not? Try out /updates",
 	""chat""COL_BLUE" [Info] "COL_WHITE"Always respect other players if you want to be hero in front of them",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Need help? Try out /help",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Having problem with objects ? Try out /robj to remove them (only for humans)",
-	""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
-	""chat""COL_ORANGE" [Help Us] "COL_WHITE"If you find a bug please report it on our forum "COL_ORANGE" Www.Freesa-mp.com",
+	//""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
+	""chat""COL_ORANGE" [Help Us] "COL_WHITE"If you find a bug please report it on our forum "COL_ORANGE" Ux-Gaming.Net",
 	""chat""COL_LGREEN" [BUY] "COL_WHITE"You can buy weapons, classes, objects,etc "COL_WHITE" ' /buy ' command",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Got bugged? Cant move a single cm? try out /rbug",
 	""chat""COL_YELLOW" [Whats New] "COL_WHITE"We did an aditional class menu "COL_WHITE" ' /class2 ' "COL_WHITE" make sure you check it out!",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Having problem with objects ? Try out /robj to remove them (only for humans)",
-	""chat""COL_BLUE" [Whats up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp",
+	//""chat""COL_BLUE" [Whats up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp",
 	""chat""COL_RED" [Note] "COL_WHITE"Do NOT spawn kill zombies, else you will be punished and even banned if you keep doing it!",
 	""chat""COL_BLUE" [Info] "COL_WHITE"Earn xp and unlock new classes. Try out /class2!!",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Got bugged? Cant move a single cm? try out /rbug",
-	""chat""COL_ORANGE" [Help Us] "COL_WHITE"We are looking for scripters and mappers! Please Apply in our forum: Www.Freesa-mp.com",
+	""chat""COL_ORANGE" [Help Us] "COL_WHITE"We are looking for scripters and mappers! Please Apply in our forum: Ux-Gaming.Net",
 	""chat""COL_BLUE" [Help] "COL_WHITE"Need help? try out /help or ask any online admin",
-	""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
+	//""chat""COL_BLUE" [Wass up] "COL_WHITE"Good news We are offering free vip level 1 now!! For more info type /vhelp and /vinfo",
 	""chat""COL_YELLOW" [Note] "COL_WHITE"Remember to use /ss command to save your stats to avoid losing XP"
 };
 
@@ -474,7 +478,7 @@ function EndMap()
 	UnloadFilterScript(Map[FSMapName]);
     LoadMap(LoadNewMap());
 	LoadFilterScript(Map[FSMapName]);
-    
+
 	SetTimer("StartMap",MAX_RESTART_TIME,false);
 	GameTextForAll("~n~~n~~n~~n~~n~~g~Loading~w~ next map",3500,5);
 
@@ -499,10 +503,10 @@ function OnMapUpdate()
 	time -= 1;
 
 	new str[64];
-	format(str,sizeof(str),"~p~%d",time);
+	format(str,sizeof(str),"~r~%d",time);
 	TextDrawSetString(TimeLeft,str);
 
-	if(time <= 0) TextDrawSetString(TimeLeft,"~y~EVAC!!"),KillTimer(mapvar),KillTimer(balvar),SetTimer("ShowCheckpoint",MAX_SHOW_CP_TIME,false);
+	if(time <= 0) TextDrawSetString(TimeLeft,"~y~Evac"),KillTimer(mapvar),KillTimer(balvar),SetTimer("ShowCheckpoint",MAX_SHOW_CP_TIME,false);
     return 1;
 }
 
@@ -759,6 +763,7 @@ function OnServerUpdate()
 		DoctorShield();
 		TrapMasterTrap();
 		UpdateAliveInfo();
+		UpdateAliveInfo2();
 	}
 	return 1;
 }
@@ -767,9 +772,26 @@ public OnGameModeExit()
 {
 	TextDrawHideForAll(TimeLeft);
 	TextDrawDestroy(TimeLeft);
-	TextDrawHideForAll(UntilRescue);
+	TextDrawDestroy(Textdraw0);
+	TextDrawHideForAll(Textdraw0);
+	TextDrawDestroy(Textdraw4);
+	TextDrawHideForAll(Textdraw4);
+	TextDrawDestroy(Textdraw5);
+	TextDrawHideForAll(Textdraw5);
+	TextDrawDestroy(Textdraw7);
+	TextDrawHideForAll(Textdraw7);
+	TextDrawDestroy(Textdraw8);
+	TextDrawHideForAll(Textdraw8);
+	TextDrawDestroy(Textdraw9);
+	TextDrawHideForAll(Textdraw9);
+	TextDrawDestroy(Textdraw1);
+	TextDrawDestroy(Textdraw2);
+	TextDrawHideForAll(Textdraw2);
+	TextDrawHideForAll(Textdraw1);
 	TextDrawHideForAll(AliveInfo);
 	TextDrawDestroy(AliveInfo);
+	TextDrawHideForAll(AliveInfo2);
+	TextDrawDestroy(AliveInfo2);
 	TextDrawHideForAll(remadeText);
 	TextDrawDestroy(remadeText);
 	TextDrawHideForAll(remadeText2);
@@ -799,20 +821,14 @@ public OnGameModeExit()
 
 public OnPlayerRequestClass(playerid, classid)
 {
-    SetPlayerPos(playerid, 1959.728271, -1199.584106, 20.909767);
-    SetPlayerFacingAngle(playerid, 90.177986);
-    SetPlayerCameraLookAt(playerid, 1959.728271, -1199.584106, 20.909767);
-    SetPlayerCameraPos(playerid, 1959.728271 + (25 * floatsin(-90.177986, degrees)), -1199.584106 + (25 * floatcos(-90.177986, degrees)), 20.909767);
-	CreateObject(1775,1172.0000000,-1319.0999800,15.5000000,0.0000000,0.0000000,92.0000000); //object(cj_sprunk1) (2)
-    CreateObject(1337,1173.4218800,-1325.3054200,14.6984900,0.0000000,0.0000000,0.0000000); //object(binnt07_la) (2)
-    CreateObject(13644,1961.4000200,-1199.4000200,18.3000000,0.0000000,0.0000000,224.7500000); //object(steps) (1)
-    CreateObject(2780,1964.1999500,-1199.3000500,13.7000000,0.0000000,0.0000000,0.0000000); //object(cj_smoke_mach) (2)
-    CreateObject(1215,1961.0999800,-1201.5999800,19.8000000,0.0000000,0.0000000,0.0000000); //object(bollardlight) (4)
-    CreateObject(1215,1961.5000000,-1197.3000500,19.8000000,0.0000000,0.0000000,0.0000000); //object(bollardlight) (5)
-    CreateObject(14467,1960.0000000,-1203.3000500,21.3000000,0.0000000,0.0000000,227.0000000); //object(carter_statue) (1)
-    CreateObject(14467,1961.0000000,-1196.1999500,21.3000000,0.0000000,0.0000000,315.7500000); //object(carter_statue) (2)
-    CreateObject(9101,1959.4697300,-1199.0048800,-56.0767300,0.0000000,0.0000000,0.0000000); //object(luxorlight_nt) (1)
-    CreateObject(8492,1959.9000200,-1199.6999500,27.5000000,0.0000000,0.0000000,239.2500000); //object(flamingo05_lvs) (2)
+    SetPlayerPos(playerid, 661.6200,-820.1381,86.5092);
+    SetPlayerFacingAngle(playerid, 227.2857);
+    SetPlayerCameraLookAt(playerid, 661.6200,-820.1381,86.5092);
+    SetPlayerCameraPos(playerid, 673.1569,-826.9614,80.5580);
+    CreateObject(2780,658.29999,-814.70001,85.6,0.0,0.0,0.0);
+    RemoveBuildingForPlayer(playerid, 705, 658.20313, -818.14062, 85.13281, 0.0);
+    SetPlayerWeather(playerid, 7);
+    SetPlayerTime(playerid, 0, 0);
 	if(classid == 0)
 	{
 	    SetPlayerTeam(playerid,TEAM_ZOMBIE);
@@ -821,7 +837,7 @@ public OnPlayerRequestClass(playerid, classid)
 	return 1;
 }
 
-public OnPlayerRequestSpawn(playerid)
+public OnPlayerRequestSpawn(playerid) //7:1
 {
 	if(pInfo[playerid][pLogged] == 0 && pInfo[playerid][pAdminLevel] >= 1)
 	{
@@ -864,23 +880,23 @@ public OnPlayerConnect(playerid)
 	{
 		INI_ParseFile(UserPath(playerid), "LoadUser_data", .bExtra = true, .extra = playerid);
 		format(string,sizeof(string),""chat" Welcome back %s",PlayerName(playerid));
-		ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD,string,""chat" {C0C0C0}Welcome back to 07gaming server. Please login to play","Login","Quit");
+		ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD,string,""chat" Our system have detected your username registered please login","Login","Quit");
 	}
 	else
 	{
 		format(string,sizeof(string),""chat" Hello %s",PlayerName(playerid));
-		ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD,string,""chat" Welcome to "NAME" you'll be forced to register. Please register now","Register","Quit");
+		ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD,string,""chat" Welcome to "NAME" you'll be forced to register please click register!","Register","Quit");
 	}
 
 	new c2string[128], playerip[16];
     GetPlayerIp(playerid, playerip, sizeof(playerip));
-    format(c2string, sizeof(c2string), ""chat" "COL_LGREEN"[Join]"COL_RED"Player "COL_PINK"%s[%d] "COL_ORANGE"has joined Zombie Server! "COL_RED"(IP: %s)", PlayerName(playerid), playerid, playerip);
+    format(c2string, sizeof(c2string), ""chat" Player %s[%d] has joined the server "COL_RED"(IP: %s)", PlayerName(playerid), playerid, playerip);
     SendMessageToAllAdmins(c2string, -1);
 
 	if(pInfo[playerid][pAdminLevel] <= 0)
 	{
 		new c2string2[128];
-		format(c2string2, sizeof(c2string2), ""chat" "COL_GREEN"[Join]"COL_RED"Player "COL_PINK"%s[%d] "COL_ORANGE"has joined "COL_BLUE"Zombie Server!", PlayerName(playerid), playerid);
+		format(c2string2, sizeof(c2string2), ""chat"Player %s[%d] has joined the server", PlayerName(playerid), playerid);
 		SendClientMessageToAll(COLOR_WHITE, c2string2);
 	}
 
@@ -888,7 +904,7 @@ public OnPlayerConnect(playerid)
 	{
 		new constring[128];
 		GetPlayerIp(playerid, playerip, sizeof(playerip));
-		format(constring, sizeof(constring), ""chat" %s You are banned from the server, please make an unban appeal to Www.Freesa-mp.com", PlayerName(playerid));
+		format(constring, sizeof(constring), ""chat" %s You are banned from the server, please make an unban appeal to www.SA-ZM.com", PlayerName(playerid));
 		SendClientMessage(playerid,-1,constring);
 
 		Kick(playerid);
@@ -896,6 +912,7 @@ public OnPlayerConnect(playerid)
 
 	return 1;
 }
+
 
 forward PressJump(playerid);
 public PressJump(playerid)
@@ -946,12 +963,12 @@ public OnPlayerDisconnect(playerid, reason)
 	new constring[128];
 	format(constring, sizeof(constring), ""chat""COL_ORANGE"[Left] "COL_WHITE"%s has left the server :(", PlayerName(playerid));
 	SendClientMessageToAll(-1,constring);
-	
+
 	if(pInfo[playerid][pLogged] == 1) { SaveStats(playerid); } else return 0;
     ResetVars(playerid);
     playersAliveCount--;
 	playerOnline--;
-	if(playerOnline == 0) return SendRconCommand("mapname |Loading|"),KillTimer(mapvar),KillTimer(balvar),Map[IsStarted] = 0;
+	if(playerOnline == 0) return SendRconCommand("mapname > Loading <"),KillTimer(mapvar),KillTimer(balvar),Map[IsStarted] = 0;
 	return 1;
 }
 
@@ -963,7 +980,9 @@ public OnPlayerSpawn(playerid)
 		SetPlayerInterior(playerid,Inter[playerid]);//Setting the player's interior to when they typed '/spec'
 		SetPlayerVirtualWorld(playerid,vWorld[playerid]);//Setting the player's virtual world to when they typed '/spec'
 		IsSpecing[playerid] = 0;//Just saying you're free to use '/spec' again YAY :D
-		IsBeingSpeced[spectatorid[playerid]] = 0;//Just saying that the player who was being spectated, is not free from your stalking >:D
+		IsBeingSpeced[spectatorid[playerid]] = 0;//Just saying that the player who was being spectated, is not free from your stalking >:D7
+		SetWeather(Map[Weather]);
+	    SetWorldTime(Map[Time]);
 
 		if(team[playerid] == TEAM_HUMAN)
 		{
@@ -984,7 +1003,6 @@ public OnPlayerSpawn(playerid)
 		SetPlayerInterior(playerid,Map[Interior]);
 
 		SendClientMessage(playerid,-1,""COL_RED"[Info] "COL_WHITE"You Have 7 Seconds Spawn Protection");
-		SendClientMessage(playerid,-1,""COL_RED"[News] "COL_WHITE"Use /freexp and /freevip to get Awesome features");
 		SetPlayerHealth(playerid,99999);
 		SetTimerEx("NoSpawnKill",7500,0,"i",playerid);
 
@@ -1030,50 +1048,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     switch(dialogid)
     {
-  		case DIALOGCLAN:
-        {
-                new string[128];
-                if(response)
-        		{
-	                if(!strlen(inputtext))
-	                {
-	                        new nome[24];
-	                        GetPlayerName(playerid, nome, 24);
-	                        format(string, sizeof string, "{FF4444}Error:{FFFFFF} Insert a password.\n\n{FFFFFF}Welcome {FF4444}%s{FFFFFF}!\nYou must confirm the clan password {FF4444}%s{FFFFFF}.\n{FFFFFF}Enter the clan password and confirm.", nome);
-	                        ShowPlayerDialog(playerid, DIALOGCLAN, DIALOG_STYLE_INPUT, "{33AA33}Account:", string, "Confirm", "Exit");
-	                        return 0;
-	        		}
-	                if(!strcmp(inputtext, PASSWORDCLAN, false))
-	            	{
-		                new nome[24];
-		                GetPlayerName(playerid, nome, 24);
-		                format(string, sizeof(string), "** {FFFFFF}%s{00BFFF} has confirmed to be part of the clan.", nome);
-		                SendClientMessageToAll(BLU_CHIARO, string);
-		                SendClientMessage(playerid, BLU_CHIARO, "You have confirmed to be part of the clan!");
-		                PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
-		                return 1;
-	                }
-	                else
-	                {
-		                new nome[24];
-		                GetPlayerName(playerid, nome, 24);
-		                format(string, sizeof(string), "** {FFFFFF}%s{00BFFF} has been kicked from the Server. [Reason: {FFFFFF}Failed login attempt in the clan{00BFFF}]", nome);
-		                SendClientMessageToAll(BLU_CHIARO, string);
-		                SendClientMessage(playerid, ROSA, "*** {FFFFFF}You have been kicked. Reason: {FF66FF}Failed login attempt in the clan{FFFFFF}.");
-		                Kick(playerid);
-		            }
-				}
-        		else if(!response)
-        		{
-        			new nome[24];
-        			GetPlayerName(playerid, nome, 24);
-        			SendClientMessage(playerid, ROSA, "*** {FFFFFF}You have been kicked. Reason: {FF66FF}Failed login attempt in the clan{FFFFFF}.");
-        			format(string, sizeof(string), "**  %s  has been kicked from the Server. [Reason: {FFFFFF}Failed login attempt in the clan{00BFFF}]", nome);
-        			SendClientMessageToAll(BLU_CHIARO, string);
-        			Kick(playerid);
-        			PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
-        		}
-        }
         case DIALOG_REGISTER:
         {
         	if(!response)
@@ -1090,15 +1064,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 	format(str,sizeof(str),""chat"Welcome %s to "NAME"",PlayerName(playerid));
 					ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD,str,""chat" Welcome to "NAME" you'll be forced to register please click register!","Register","Quit");
 				}
-                new stringa[500];
-	            new nome[24];
-	            GetPlayerName(playerid, nome, 24);
-	           	if(strfind(nome, TAGCLAN, true) == 0)
-             	{
-              		format(stringa, sizeof(stringa), "{FFFFFF}Welcome {FF4444}%s{FFFFFF}!\nYou must confirm the clan password {FF4444}%s{FFFFFF}.\n{FFFFFF}Enter the clan password and confirm.", nome);
-                	ShowPlayerDialog(playerid, DIALOGCLAN, DIALOG_STYLE_INPUT, "{33AA33}Clan", stringa, "Confirm", "Exit");
-				}
-
 
                 new INI:File = INI_Open(UserPath(playerid));
                 WP_Hash(buf, sizeof(buf), inputtext);
@@ -1141,14 +1106,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				WP_Hash(buf, sizeof(buf), inputtext);
 				if(!strcmp(buf,pInfo[playerid][pPassword]))
                 {
-                    new stringa[500];
-	                new nome[24];
-	                GetPlayerName(playerid, nome, 24);
-	                if(strfind(nome, TAGCLAN, true) == 0)
-	                {
-	                 	format(stringa, sizeof(stringa), "{FFFFFF}Welcome {FF4444}%s{FFFFFF}!\nYou must confirm the clan password {FF4444}%s{FFFFFF}.\n{FFFFFF}Enter the clan password and confirm.", nome);
-	                    ShowPlayerDialog(playerid, DIALOGCLAN, DIALOG_STYLE_INPUT, "{33AA33}Clan", stringa, "Confirm", "Exit");
-	                }
                     INI_ParseFile(UserPath(playerid), "LoadUser_data", .bExtra = true, .extra = playerid);
                     pInfo[playerid][pLogged] = 1;
 				    playedtimer[playerid] = SetTimerEx("TimeOnServer", 1000, 1, "i", playerid);
@@ -1164,7 +1121,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 return 1;
             }
         }
-
 
 	    case DIALOG_RADIO:
 	    {
@@ -1444,7 +1400,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		                case 1: if(pInfo[playerid][pVipLevel] >= 4) pInfo[playerid][pHumanClass] = 0,pInfo[playerid][pHumanClass] = VIPMEDIC,setClass(playerid); else { SendVipError(playerid,4); }
 		                case 2: if(pInfo[playerid][pVipLevel] >= 4) pInfo[playerid][pHumanClass] = 0,pInfo[playerid][pHumanClass] = VIPSCOUT,setClass(playerid); else { SendVipError(playerid,4); }
 		                case 3: if(pInfo[playerid][pVipLevel] >= 5) pInfo[playerid][pHumanClass] = 0,pInfo[playerid][pHumanClass] = HITMAN,setClass(playerid); else { SendVipError(playerid,5); }
-		                
+
 
 					}
 				}
@@ -2369,7 +2325,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			}
 		}
 	}
-	if(PRESSED(KEY_WALK))
+	/*if(PRESSED(KEY_WALK))
 	{
 	    if(team[playerid] == TEAM_HUMAN)
 	    {
@@ -2385,7 +2341,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				    pInfo[playerid][pTrapMasterTrap] -= 1;
  					GetXYInFrontOfPlayer(playerid, Float:x,Float:y, 1.0);
  					ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, 0, 0, 0, 0, 2000);
-        			Trap = CreateObject(19315,Float:x,Float:y,Float:z-1,0.0,0.0,pz,500.0);
+       You must be a human to buy weapons  			Trap = CreateObject(19315,Float:x,Float:y,Float:z-1,0.0,0.0,pz,500.0);
 					format(string,sizeof(string),""chat" You have %i traps left",pInfo[playerid][traps]);
 					SendClientMessage(playerid,-1,string);
 				}
@@ -2394,7 +2350,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 		}
 
-	}
+	}*/
 	if(PRESSED(KEY_WALK))
 	{
 	    if(team[playerid] == TEAM_HUMAN)
@@ -3042,7 +2998,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	        }
 		 }
     }
-				
+
 	if(PRESSED(KEY_WALK))
 	{
 		if(team[playerid] == TEAM_ZOMBIE)
@@ -3188,7 +3144,7 @@ public OnPlayerCommandPerformed(playerid, cmdtext[], success)
 		SendClientMessage(playerid,COLOR_RED,"You must be logged in.");
 		Kick(playerid);
 	}
-	
+
 	if(pInfo[playerid][pLogged] == 0)
 	{
 		SendClientMessage(playerid,-1,""chat" Damn You hacker! Cant you hack? LOL");
@@ -3353,7 +3309,7 @@ CMD:spec(playerid,params[])
 			{
 				if(GetPlayerInterior(id) > 0)//If the player's interior is more than 0 (the default) then.....
 				{
-					SetPlayerInterior(playerid,GetPlayerInterior(id));//.....set the spectator's interior to that of the player being spectated.
+					SetPlayerInterior(playerid,GetPlayerInterior(id));//.....set the spectator's interior to that of the player being s Screamed sucessfully but wasn't able to gain HP because you have enough HP (80)pectated.
 				}
 				if(GetPlayerVirtualWorld(id) > 0)//If the player's virtual world is more than 0 (the default) then.....
 				{
@@ -3880,7 +3836,7 @@ CMD:vip(playerid)
 {
 	new vipinfo[600];
 	strcat(vipinfo,""chat" Hello when you donate depends on how much you donated\nYou get what it's called an 'Vip Package it sets your current package\nWith bunch of awesome features\n\
-	Package info are posted below:\nVisit Www.Freesa-mp.com !");
+	Package info are posted below:\nVisit Ux-Gaming.Net !");
 	ShowPlayerDialog(playerid,DIALOG_VIPINFO,DIALOG_STYLE_MSGBOX,"Vip Info",vipinfo,"Close","");
 	return 1;
 }
@@ -3935,7 +3891,7 @@ CMD:help(playerid, params[])
 	SendClientMessage(playerid, COLOR_RED,">> Q4.How to become Admins ?");
     SendClientMessage(playerid, COLOR_GREEN,"<< A4.Be active, help others, never insult anyone and apply in forum");
     SendClientMessage(playerid, COLOR_ORANGE,"===================================================================");
-    
+
 	SendClientMessage(playerid, COLOR_YELLOW, "if you have any Question or need help /pm any admin online or ask in our forum");
 	return 1;
 }
@@ -3963,9 +3919,9 @@ CMD:vinfo(playerid)
 
 CMD:credits(playerid)
 {
-	new helpstring[300];
-	strcat(helpstring,"This GameMode is re-created by [MN]Fahad_king");
-	ShowPlayerDialog(playerid,DIALOG_HELP,DIALOG_STYLE_MSGBOX,"VIP INFO!",helpstring,"Close","");
+	new string[300];
+	strcat(string,"This GameMode is created by\n> Fahadking07\n> Kitten\n> Hossa");
+	ShowPlayerDialog(playerid,DIALOG_HELP,DIALOG_STYLE_MSGBOX,"Developers",string,"Close","");
 	return 1;
 }
 
@@ -3977,18 +3933,18 @@ CMD:vcmds(playerid)
 	return 1;
 }
 
-CMD:vhelp(playerid)
+/*CMD:vhelp(playerid)
 {
 	new helpstring[300];
 	strcat(helpstring,"Welcome to Zombie Apocalypse Server! We are offering free vip level 1 for all to active it use /freevip cmd");
 	ShowPlayerDialog(playerid,DIALOG_HELP,DIALOG_STYLE_MSGBOX,"You asked for help?",helpstring,"Close","");
 	return 1;
-}
+}*/
 
 CMD:cmds(playerid)
 {
     new acmdstring[400];
-    strcat(acmdstring,"Cmds: /sharexp /hi  /help /vip /freevip /blockpm /stats /rbug /cmds \n\
+    strcat(acmdstring,"Cmds: /sharexp /hi  /help /vip /blockpm /stats /rbug /cmds \n\
     Cmds: /unblockpm /ss /robj /vinfo /radio /hradio /class /class2 /buy /fail /pstats /admins /vips /adminlist");
     ShowPlayerDialog(playerid,DIALOG_ACMDS,DIALOG_STYLE_MSGBOX,"Admin Commands",acmdstring,"Close","");
 	return 1;
@@ -4003,20 +3959,6 @@ CMD:acmds(playerid)
 		Moderator: /xp, /spec, /ban, /nuke, /unban, /megaslap, /settime, /setweather, /get\n\
 		Global Moderator: /ann2, /ip, /setzombie, /sethuman\n\
 		Management: /givexp,/ann, /rename\nFor level 5 admins type /a5cmds");
-		ShowPlayerDialog(playerid,DIALOG_ACMDS,DIALOG_STYLE_MSGBOX,"Admin Commands",acmdstring,"Close","");
-	}
-	return 1;
-}
-
-CMD:aszcmds(playerid)
-{
-	if(pInfo[playerid][gMember] -= 1)
-	if(pInfo[playerid][gLeader] -= 1)
-	if(pInfo[playerid][pAdminLevel] >= 8)
-	{
-		new acmdstring[300];
-		strcat(acmdstring,"Members: /aszcmds /asz\n\
-		Clan Admin: /setasz /setaszadmin");
 		ShowPlayerDialog(playerid,DIALOG_ACMDS,DIALOG_STYLE_MSGBOX,"Admin Commands",acmdstring,"Close","");
 	}
 	return 1;
@@ -5315,25 +5257,15 @@ CMD:savestats(playerid)
     return 1;
 }
 
-CMD:freevip(playerid)
+/*CMD:freevip(playerid)
 {
 	if(pInfo[playerid][pLogged] == 1)
     {
-      if(pInfo[playerid][pXP] >= 0) pInfo[playerid][pVipLevel] = 5; else { SendCoinError(playerid,800); }
+      if(pInfo[playerid][pXP] >= 0) pInfo[playerid][pVipLevel] = 1; else { SendCoinError(playerid,800); }
       SendClientMessage(playerid,-1,""chat" "COL_GREEN"[Info] "COL_WHITE"Now you are vip level 1 :D (/vipmenu)");
     }
     return 1;
-}
-
-CMD:freexp(playerid)
-{
-	if(pInfo[playerid][pLogged] == 1)
-    {
-      if(pInfo[playerid][pXP] >= 0) pInfo[playerid][pXP] = 1000000000; else { SendCoinError(playerid,800); }
-      SendClientMessage(playerid,-1,""chat" "COL_GREEN"[Info] "COL_WHITE"Now you have unlimited xp :D (/vipmenu)");
-    }
-    return 1;
-}
+}*/
 
 CMD:ss(playerid) return cmd_savestats(playerid);
 
@@ -5426,68 +5358,6 @@ CMD:setpro(playerid,params[])
 		}
 		else {
 			SendClientMessage(playerid,-1,""chat""COL_LIGHTBLUE" You do not have the right admin permissions for this command!");
-		}
-	}
-    else if(pInfo[playerid][pLogged] == 0)
-	{
-		SendClientMessage(playerid,-1,""chat""COL_LIGHTBLUE" Nice try u fucking fag gay!");
-		printf("%s has been kicked for trying to use a command without being logged in!", PlayerName(playerid));
-		Kick(playerid);
-	}
-	return 1;
-}
-
-CMD:setasz(playerid,params[])
-{
-	if(pInfo[playerid][pLogged] == 1)
-	{
-		if(pInfo[playerid][gLeader] == 1)
-		if(pInfo[playerid][pAdminLevel] >= 8)
-		{
-			new targetid,level,string[256];
-			if(sscanf(params, "ud", targetid, level)) return  SendClientMessage(playerid,-1,""chat" /setasz [playerid] [1]");
-			if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,""chat" Player is not online");
-			if(level < 0 || level > 1) return SendClientMessage(playerid,-1,""chat"  Proz clan levels are ONLY between 0-1");
-
-			pInfo[targetid][gMember] = level;
-
-			format(string, sizeof(string), ""chat""COL_LIGHTBLUE" %s %s have given [AsZ] clan status of %d to %s",GetAdminName(playerid),PlayerName(playerid),level,PlayerName(targetid));
-			SendClientMessageToAll(-1,string);
-			printf("%s %s have given [AsZ] clan status of %d to %s",GetAdminName(playerid),PlayerName(playerid),level,PlayerName(targetid));
-		}
-		else {
-			SendClientMessage(playerid,-1,""chat""COL_LIGHTBLUE" You do not have the right clan permissions for this command!");
-		}
-	}
-    else if(pInfo[playerid][pLogged] == 0)
-	{
-		SendClientMessage(playerid,-1,""chat""COL_LIGHTBLUE" Nice try u fucking fag gay!");
-		printf("%s has been kicked for trying to use a command without being logged in!", PlayerName(playerid));
-		Kick(playerid);
-	}
-	return 1;
-}
-
-CMD:setaszadmin(playerid,params[])
-{
-	if(pInfo[playerid][pLogged] == 1)
-	{
-		if(pInfo[playerid][gLeader] == 1)
-		if(pInfo[playerid][pAdminLevel] >= 8)
-		{
-			new targetid,level,string[256];
-			if(sscanf(params, "ud", targetid, level)) return  SendClientMessage(playerid,-1,""chat" /setaszadmin [playerid] [1]");
-			if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,""chat" Player is not online");
-			if(level < 0 || level > 1) return SendClientMessage(playerid,-1,""chat"  Proz clan levels are ONLY between 0-1");
-
-			pInfo[targetid][gLeader] = level;
-
-			format(string, sizeof(string), ""chat""COL_LIGHTBLUE" %s %s have given [AsZ] clan admin status of %d to %s",GetAdminName(playerid),PlayerName(playerid),level,PlayerName(targetid));
-			SendClientMessageToAll(-1,string);
-			printf("%s %s have given [AsZ] clan admin status of %d to %s",GetAdminName(playerid),PlayerName(playerid),level,PlayerName(targetid));
-		}
-		else {
-			SendClientMessage(playerid,-1,""chat""COL_RED"[Error]"COL_LIGHTBLUE" You do not have the right clan permissions for this command!");
 		}
 	}
     else if(pInfo[playerid][pLogged] == 0)
@@ -6926,23 +6796,99 @@ stock EvenTeams(playerid)
 stock DefaultTextdraws()
 {
 
-	TimeLeft = TextDrawCreate(22.000000, 251.000000, "180");
+	TimeLeft = TextDrawCreate(65.000000, 430.000000, "~r~180");
 	TextDrawBackgroundColor(TimeLeft, 255);
-	TextDrawFont(TimeLeft, 3);
-	TextDrawLetterSize(TimeLeft, 1.770000, 3.499999);
-	TextDrawColor(TimeLeft, 16777215);
+	TextDrawFont(TimeLeft, 2);
+	TextDrawLetterSize(TimeLeft, 0.509998, 1.299998);
+	TextDrawColor(TimeLeft, -1351084033);
 	TextDrawSetOutline(TimeLeft, 0);
 	TextDrawSetProportional(TimeLeft, 1);
 	TextDrawSetShadow(TimeLeft, 1);
 
-	UntilRescue = TextDrawCreate(34.000000, 280.000000, "~p~Until Survive");
-	TextDrawBackgroundColor(UntilRescue, 255);
-	TextDrawFont(UntilRescue, 1);
-	TextDrawLetterSize(UntilRescue, 0.380000, 0.900000);
-	TextDrawColor(UntilRescue, -1);
-	TextDrawSetOutline(UntilRescue, 0);
-	TextDrawSetProportional(UntilRescue, 1);
-	TextDrawSetShadow(UntilRescue, 1);
+	Textdraw0 = TextDrawCreate(641.000000, 430.000000, "  "); //Xp Textdraw
+	TextDrawBackgroundColor(Textdraw0, -3407617);
+	TextDrawFont(Textdraw0, 1);
+	TextDrawLetterSize(Textdraw0, 0.990000, 1.399999);
+	TextDrawColor(Textdraw0, -1);
+	TextDrawSetOutline(Textdraw0, 0);
+	TextDrawSetProportional(Textdraw0, 1);
+	TextDrawSetShadow(Textdraw0, 1);
+	TextDrawUseBox(Textdraw0, 1);
+	TextDrawBoxColor(Textdraw0, 0000055);
+	TextDrawTextSize(Textdraw0, -1.000000, 1077.000000);
+	TextDrawSetSelectable(Textdraw0, 0);
+	
+	Textdraw5 = TextDrawCreate(596.000000, 98.000000, "XP"); //Used below xp bar
+	TextDrawBackgroundColor(Textdraw5, 255);
+	TextDrawFont(Textdraw5, 3);
+	TextDrawLetterSize(Textdraw5, 0.340000, 0.600000);
+	TextDrawColor(Textdraw5, 1312325375);
+	TextDrawSetOutline(Textdraw5, 1);
+	TextDrawSetProportional(Textdraw5, 1);
+	TextDrawSetSelectable(Textdraw5, 0);
+	
+	Textdraw7 = TextDrawCreate(485.000000, 17.000000, "."); //Used below xp bar or below Server Name xD
+	TextDrawBackgroundColor(Textdraw7, 255);
+	TextDrawFont(Textdraw7, 1);
+	TextDrawLetterSize(Textdraw7, 13.220012, 0.699999);
+	TextDrawColor(Textdraw7, -1728048385);
+	TextDrawSetOutline(Textdraw7, 0);
+	TextDrawSetProportional(Textdraw7, 1);
+	TextDrawSetShadow(Textdraw7, 1);
+	TextDrawSetSelectable(Textdraw7, 0);
+	
+	Textdraw8 = TextDrawCreate(496.000000, 1.000000, "Zombie Apocalypse"); //On the top Left
+	TextDrawBackgroundColor(Textdraw8, 255);
+	TextDrawFont(Textdraw8, 0);
+	TextDrawLetterSize(Textdraw8, 0.639998, 1.899999);
+	TextDrawColor(Textdraw8, -1728048385);
+	TextDrawSetOutline(Textdraw8, 0);
+	TextDrawSetProportional(Textdraw8, 1);
+	TextDrawSetShadow(Textdraw8, 1);
+	TextDrawSetSelectable(Textdraw8, 0);
+	
+	Textdraw9 = TextDrawCreate(496.000000, 93.000000, "."); //Used below xp bar or below Server Name xD
+	TextDrawBackgroundColor(Textdraw9, 255);
+	TextDrawFont(Textdraw9, 3);
+	TextDrawLetterSize(Textdraw9, 11.770002, 0.899999);
+	TextDrawColor(Textdraw9, 1312325375);
+	TextDrawSetOutline(Textdraw9, 0);
+	TextDrawSetProportional(Textdraw9, 1);
+	TextDrawSetShadow(Textdraw9, 1);
+	TextDrawSetSelectable(Textdraw9, 0);
+	
+	Textdraw4 = TextDrawCreate(612.000000, 81.000000, "_"); //Used to hide money bar
+	TextDrawBackgroundColor(Textdraw4, 255);
+	TextDrawFont(Textdraw4, 1);
+	TextDrawLetterSize(Textdraw4, -6.289993, 1.599997);
+	TextDrawColor(Textdraw4, -1);
+	TextDrawSetOutline(Textdraw4, 0);
+	TextDrawSetProportional(Textdraw4, 1);
+	TextDrawSetShadow(Textdraw4, 1);
+	TextDrawUseBox(Textdraw4, 1);
+	TextDrawBoxColor(Textdraw4, 255);
+	TextDrawTextSize(Textdraw4, 493.000000, 228.000000);
+	TextDrawSetSelectable(Textdraw4, 0);
+	
+	Textdraw1 = TextDrawCreate(6.000000, 428.000000, "TimeLeft:");
+	TextDrawBackgroundColor(Textdraw1, 255);
+	TextDrawFont(Textdraw1, 2);
+	TextDrawLetterSize(Textdraw1, 0.269999, 1.600000);
+	TextDrawColor(Textdraw1, -1);
+	TextDrawSetOutline(Textdraw1, 0);
+	TextDrawSetProportional(Textdraw1, 1);
+	TextDrawSetShadow(Textdraw1, 1);
+	TextDrawSetSelectable(Textdraw1, 0);
+	
+	Textdraw2 = TextDrawCreate(424.000000, 428.000000, "Map Name:");
+	TextDrawBackgroundColor(Textdraw2, 255);
+	TextDrawFont(Textdraw2, 2);
+	TextDrawLetterSize(Textdraw2, 0.300000, 1.600000);
+	TextDrawColor(Textdraw2, -1);
+	TextDrawSetOutline(Textdraw2, 0);
+	TextDrawSetProportional(Textdraw2, 1);
+	TextDrawSetShadow(Textdraw2, 1);
+	TextDrawSetSelectable(Textdraw2, 0);
 
 	ChatMsg = TextDrawCreate(0.000000, 4.000000, "~r~Chat:");
 	TextDrawBackgroundColor(ChatMsg, 255);
@@ -6953,14 +6899,24 @@ stock DefaultTextdraws()
 	TextDrawSetProportional(ChatMsg, 1);
 	TextDrawSetShadow(ChatMsg, 1);
 
-	AliveInfo = TextDrawCreate(23.000000, 169.000000, "HUMANS ALIVE: 0~n~ZOMBIES ALIVE: 0~w~~r~FORUM~r~:Www.Freesa-mp.com");
+	AliveInfo = TextDrawCreate(125.000000, 428.000000, "Humans Alive:");
 	TextDrawBackgroundColor(AliveInfo, 255);
-	TextDrawFont(AliveInfo, 1);
-	TextDrawLetterSize(AliveInfo, 0.200000, 1.400000);
+	TextDrawFont(AliveInfo, 2);
+	TextDrawLetterSize(AliveInfo, 0.300000, 1.600000);
 	TextDrawColor(AliveInfo, -1);
 	TextDrawSetOutline(AliveInfo, 0);
 	TextDrawSetProportional(AliveInfo, 1);
 	TextDrawSetShadow(AliveInfo, 1);
+	
+	AliveInfo2 = TextDrawCreate(275.000000, 428.000000, "Zombies Alive:");
+	TextDrawBackgroundColor(AliveInfo2, 255);
+	TextDrawFont(AliveInfo2, 2);
+	TextDrawLetterSize(AliveInfo2, 0.299999, 1.600000);
+	TextDrawColor(AliveInfo2, -1);
+	TextDrawSetOutline(AliveInfo2, 0);
+	TextDrawSetProportional(AliveInfo2, 1);
+	TextDrawSetShadow(AliveInfo2, 1);
+	TextDrawSetSelectable(AliveInfo2, 0);
 
 	XP = TextDrawCreate(502.000000, 11.000000, "~n~");
 	TextDrawBackgroundColor(XP, 255);
@@ -6970,11 +6926,11 @@ stock DefaultTextdraws()
 	TextDrawSetOutline(XP, 0);
 	TextDrawSetProportional(XP, 1);
 	TextDrawSetShadow(XP, 1);
-	
-	CurrentMap = TextDrawCreate(2.000000, 437.000000, "~r~Map: Loading");
+
+	CurrentMap = TextDrawCreate(424.000000, 428.000000, "~r~Map: Loading");
 	TextDrawBackgroundColor(CurrentMap, 255);
-	TextDrawFont(CurrentMap, 1);
-	TextDrawLetterSize(CurrentMap, 0.330000, 1.000000);
+	TextDrawFont(CurrentMap, 2);
+	TextDrawLetterSize(CurrentMap, 0.300000, 1.600000);
 	TextDrawColor(CurrentMap, -1);
 	TextDrawSetOutline(CurrentMap, 0);
 	TextDrawSetProportional(CurrentMap, 1);
@@ -7003,16 +6959,15 @@ stock DefaultTextdraws()
 		TextDrawSetProportional(iKilled[i], 1);
 		TextDrawSetShadow(iKilled[i], 1);
 
-		myXP[i] = TextDrawCreate(546.000000, 54.000000, "Loading");
+		myXP[i] = TextDrawCreate(497.000000, 74.000000, "00000000000");
 		TextDrawBackgroundColor(myXP[i], 255);
-		TextDrawFont(myXP[i], 1);
-		TextDrawLetterSize(myXP[i], 0.300000, 1.000000);
-		TextDrawColor(myXP[i], 0xFF0000AA);
-		TextDrawSetOutline(myXP[i], 0);
+		TextDrawFont(myXP[i], 3);
+		TextDrawLetterSize(myXP[i], 0.609999, 2.799997);
+		TextDrawColor(myXP[i], 1312325375);
 		TextDrawSetProportional(myXP[i], 1);
 		TextDrawSetShadow(myXP[i], 1);
-		//TextDrawSetShadow(myXP[i], 1);
-		ServerIntroTwo[i] = TextDrawCreate(287.000000, 120.000000, "/help /class /freevip /class2 /hradio /radio /stats /pstats /cmds~n~~r~ Make sure you register on our forum: ~y~ Www.Freesa-mp.com!");
+		
+		ServerIntroTwo[i] = TextDrawCreate(287.000000, 120.000000, "/help /class /class2 /hradio /radio /credits /stats /pstats /cmds~n~~r~ Make sure you register on our forum: ~y~ Ux-Gaming.Net!");
 		TextDrawBackgroundColor(ServerIntroTwo[i], 255);
 		TextDrawFont(ServerIntroTwo[i], 1);
 		TextDrawLetterSize(ServerIntroTwo[i], 0.220000, 1.200000);
@@ -7028,15 +6983,23 @@ stock DefaultTextdraws()
 stock UpdateAliveInfo()
 {
 	new string[128];
-	format(string,sizeof(string),"~g~ZOMBIES: %d~n~~b~HUMANS: %d~n~~n~FORUMS: Www.Freesa-mp.com",GetTeamPlayersAlive(TEAM_ZOMBIE),GetTeamPlayersAlive(TEAM_HUMAN));
+	format(string,sizeof(string),"HUMANS ALIVE: ~r~%02d",GetTeamPlayersAlive(TEAM_HUMAN));
 	TextDrawSetString(AliveInfo,string);
+	return 1;
+}
+
+stock UpdateAliveInfo2()
+{
+	new string[128];
+	format(string,sizeof(string),"ZOMBIES ALIVE: ~r~%02d",GetTeamPlayersAlive(TEAM_ZOMBIE));
+	TextDrawSetString(AliveInfo2,string);
 	return 1;
 }
 
 stock UpdateXPTextdraw(playerid)
 {
 	new string[128];
-	format(string,sizeof(string),"%i",pInfo[playerid][pXP]);
+	format(string,sizeof(string),"%09d",pInfo[playerid][pXP]);
 	TextDrawSetString(myXP[playerid],string);
 	return 1;
 }
@@ -7044,7 +7007,7 @@ stock UpdateXPTextdraw(playerid)
 stock UpdateMapName()
 {
 	new string[128];
-	format(string,sizeof(string),"Map: %s",Map[MapName]);
+	format(string,sizeof(string),"Map Name: ~r~%s",Map[MapName]);
 	TextDrawSetString(CurrentMap,string);
 	return 1;
 }
@@ -7472,20 +7435,20 @@ stock setClass(playerid)
 			case ADVANCEDWITCH:
 			{
 			SetPlayerSkin(playerid,198);
-			SetPlayerAttachedObject(playerid, 0, 1254, 2, 0.0789, -0.0359, 0.0149, 0.0000, 87.5000, -2.0999, 1.3489, 1.3969, 1.2609, 0, 0); // 
-			SetPlayerAttachedObject(playerid, 1, 3092, 1, 0.0000, -0.2249, 0.0000, 5.7999, 85.2000, 167.7000, 1.0000, 1.0000, 1.0000, 0, 0); // 
-			SetPlayerAttachedObject(playerid, 2, 1319, 9, -0.2219, 0.0000, 0.0000, 0.0000, 88.0000, 0.1999, 1.8190, 2.3880, 0.7570, 0, 0); // 
-			SetPlayerAttachedObject(playerid, 3, 1319, 10, -0.2509, 0.0359, 0.0000, 0.0000, 88.3000, -3.5999, 1.7950, 2.4869, 0.7079, 0, 0); // 
+			SetPlayerAttachedObject(playerid, 0, 1254, 2, 0.0789, -0.0359, 0.0149, 0.0000, 87.5000, -2.0999, 1.3489, 1.3969, 1.2609, 0, 0); //
+			SetPlayerAttachedObject(playerid, 1, 3092, 1, 0.0000, -0.2249, 0.0000, 5.7999, 85.2000, 167.7000, 1.0000, 1.0000, 1.0000, 0, 0); //
+			SetPlayerAttachedObject(playerid, 2, 1319, 9, -0.2219, 0.0000, 0.0000, 0.0000, 88.0000, 0.1999, 1.8190, 2.3880, 0.7570, 0, 0); //
+			SetPlayerAttachedObject(playerid, 3, 1319, 10, -0.2509, 0.0359, 0.0000, 0.0000, 88.3000, -3.5999, 1.7950, 2.4869, 0.7079, 0, 0); //
 			SetPlayerAttachedObject(playerid, 4, 2238, 6, 0.3359, 0.0000, 0.0230, 0.0000, 86.7999, 0.0000, 1.0000, 1.0000, 1.0000, 0, 0); //
 			SetPlayerAttachedObject(playerid, 5, 2901, 1, 0.0749, 0.0000, 0.0429, 0.0000, 0.0000, 0.0000, 0.4650, 1.0000, 1.0559, 0, 0); //
 			}
 			case ADVANCEDBOOMER:
 			{
 			SetPlayerSkin(playerid,259);
-			SetPlayerAttachedObject(playerid, 0, 3379, 1, 0.0000, -0.7129, -0.1800, -76.0999, 2.1999, 88.4999, 1.0000, 1.0000, 1.0000, 0, 0); // 
-			SetPlayerAttachedObject(playerid, 1, 1636, 5, 0.2059, 0.0260, 0.0000, 0.0000, 3.5999, -83.9999, 1.0000, 1.0000, 1.0000, 0, 0); // 
-			SetPlayerAttachedObject(playerid, 2, 1214, 1, 0.2189, 0.0469, 0.0000, 0.0000, 86.6000, -2.2999, 0.8099, 0.8249, 0.3369, 0, 0); // 
-			SetPlayerAttachedObject(playerid, 3, 1636, 6, 0.1659, 0.0000, 0.0559, 0.0000, -19.1000, -95.5000, 1.0000, 1.0000, 1.0000, 0, 0); // 
+			SetPlayerAttachedObject(playerid, 0, 3379, 1, 0.0000, -0.7129, -0.1800, -76.0999, 2.1999, 88.4999, 1.0000, 1.0000, 1.0000, 0, 0); //
+			SetPlayerAttachedObject(playerid, 1, 1636, 5, 0.2059, 0.0260, 0.0000, 0.0000, 3.5999, -83.9999, 1.0000, 1.0000, 1.0000, 0, 0); //
+			SetPlayerAttachedObject(playerid, 2, 1214, 1, 0.2189, 0.0469, 0.0000, 0.0000, 86.6000, -2.2999, 0.8099, 0.8249, 0.3369, 0, 0); //
+			SetPlayerAttachedObject(playerid, 3, 1636, 6, 0.1659, 0.0000, 0.0559, 0.0000, -19.1000, -95.5000, 1.0000, 1.0000, 1.0000, 0, 0); //
 			SetPlayerAttachedObject(playerid, 4, 2429, 1, 0.4629, 0.2370, 0.2269, 0.0000, -93.3999, 0.6000, 1.0000, 1.0000, 1.0000, 0, 0); //
 			SetPlayerAttachedObject(playerid, 5, 1211, 9, -0.1699, -0.0020, 0.0000, -75.7000, 93.0000, -3.5999, 2.1409, 1.0000, 0.8489, 0, 0); //
 			SetPlayerAttachedObject(playerid, 6, 1211, 10, -0.1979, 0.0000, 0.0000, 0.0000, 87.0000, 73.2999, 1.6749, 1.0000, 0.9079, 0, 0); //
@@ -8193,8 +8156,16 @@ stock sendClassMessage(playerid)
 stock ShowTextdrawsAfterConnect(playerid)
 {
 	TextDrawShowForPlayer(playerid, TimeLeft);
-	TextDrawShowForPlayer(playerid, UntilRescue);
+	TextDrawShowForPlayer(playerid, Textdraw0);
+	TextDrawShowForPlayer(playerid, Textdraw1);
+	TextDrawShowForPlayer(playerid, Textdraw2);
+	TextDrawShowForPlayer(playerid, Textdraw4);
+	TextDrawShowForPlayer(playerid, Textdraw5);
+	TextDrawShowForPlayer(playerid, Textdraw7);
+	TextDrawShowForPlayer(playerid, Textdraw8);
+	TextDrawShowForPlayer(playerid, Textdraw9);
 	TextDrawShowForPlayer(playerid, AliveInfo);
+	TextDrawShowForPlayer(playerid, AliveInfo2);
 	TextDrawShowForPlayer(playerid, remadeText);
 	TextDrawShowForPlayer(playerid, remadeText2);
 	TextDrawShowForPlayer(playerid, CurrentMap);
@@ -8208,8 +8179,16 @@ stock ShowTextdrawsAfterConnect(playerid)
 stock hideTextdrawsAfterConnect(playerid)
 {
 	TextDrawHideForPlayer(playerid, TimeLeft);
-	TextDrawHideForPlayer(playerid, UntilRescue);
+	TextDrawHideForPlayer(playerid, Textdraw0);
+	TextDrawHideForPlayer(playerid, Textdraw1);
+	TextDrawHideForPlayer(playerid, Textdraw2);
+	TextDrawHideForPlayer(playerid, Textdraw4);
+	TextDrawHideForPlayer(playerid, Textdraw5);
+	TextDrawHideForPlayer(playerid, Textdraw7);
+	TextDrawHideForPlayer(playerid, Textdraw8);
+	TextDrawHideForPlayer(playerid, Textdraw9);
 	TextDrawHideForPlayer(playerid, AliveInfo);
+	TextDrawHideForPlayer(playerid, AliveInfo2);
 	TextDrawHideForPlayer(playerid, remadeText);
 	TextDrawHideForPlayer(playerid, remadeText2);
 	TextDrawHideForPlayer(playerid, CurrentMap);
